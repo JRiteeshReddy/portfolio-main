@@ -17,28 +17,28 @@
         <!-- Main Hero Section (Hidden Initially) -->
         <div id="hero-section" class="hidden">
             <div class="hero-left">
-                <div class="folder">
+                <div class="folder" onclick="openModal('ABOUT')">
 <pre>
  ┌─────────┐
  │ ABOUT   │
  └─────────┘
 </pre>
                 </div>
-                <div class="folder">
+                <div class="folder" onclick="openModal('WORK')">
 <pre>
  ┌─────────┐
  │ WORK    │
  └─────────┘
 </pre>
                 </div>
-                <div class="folder">
+                <div class="folder" onclick="openModal('SKILLS')">
 <pre>
  ┌─────────┐
  │ SKILLS  │
  └─────────┘
 </pre>
                 </div>
-                <div class="folder">
+                <div class="folder" onclick="openModal('CONTACT')">
 <pre>
  ┌─────────┐
  │ CONTACT │
@@ -55,6 +55,19 @@
                 <div class="prompt">
                     <span><C:\Users\JRiteeshReddy</span>
                     <span class="blinking-cursor"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Container -->
+        <div id="modal-container" class="hidden">
+            <div class="modal-window crt">
+                <div class="modal-header">
+                    <span id="modal-title">C:\Windows\system32\cmd.exe</span>
+                    <span class="close-btn" onclick="closeModal()">[X]</span>
+                </div>
+                <div class="modal-content" id="modal-body">
+                    <!-- Content injected via JS -->
                 </div>
             </div>
         </div>
