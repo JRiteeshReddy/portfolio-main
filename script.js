@@ -144,3 +144,31 @@ closePopup.addEventListener("click", () => {
     popupContainer.classList.add("hidden");
     clearInterval(typePopupInterval);
 });
+
+// Draggable Popup Logic
+const popupWindow = document.querySelector(".popup-window");
+const popupHeader = document.querySelector(".popup-header");
+
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+popupHeader.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    const rect = popupWindow.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left;
+    dragOffsetY = e.clientY - rect.top;
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        let newX = e.clientX - dragOffsetX;
+        let newY = e.clientY - dragOffsetY;
+        popupWindow.style.left = newX + "px";
+        popupWindow.style.top = newY + "px";
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+});
