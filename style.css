@@ -79,11 +79,48 @@ body {
 /* Hero Section */
 #hero-section {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     height: 100%;
+    width: 100%;
     animation: fadeIn 1s step-end; /* Snappy, non-smooth fade for retro feel */
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex: 0 0 30%;
+    padding-left: 5%;
+}
+
+.hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    flex: 0 0 65%;
+    padding-right: 5%;
+}
+
+.folder {
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+}
+
+.folder:hover {
+    color: #fff;
+    text-shadow: 0 0 15px #00ff41;
+    transform: scale(1.05);
+}
+
+.folder pre {
+    font-family: var(--font-mono);
+    margin: 0;
+    line-height: 1.2;
+    font-size: 1.8rem;
 }
 
 @keyframes fadeIn {
