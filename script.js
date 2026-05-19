@@ -90,3 +90,24 @@ function startDownload() {
 
 // Start sequence
 setTimeout(typeCode, 1000);
+
+// Screen Glitch Effect
+function triggerRandomGlitch() {
+    const screen = document.getElementById("terminal-screen");
+    
+    // Only glitch if the hero section is visible
+    if (!heroSection.classList.contains("hidden")) {
+        screen.classList.add("glitching");
+        
+        setTimeout(() => {
+            screen.classList.remove("glitching");
+        }, Math.random() * 300 + 100); // Glitch lasts 100ms to 400ms
+    }
+    
+    // Schedule next glitch between 3s and 10s
+    setTimeout(triggerRandomGlitch, Math.random() * 7000 + 3000);
+}
+
+// Start the glitch cycle
+setTimeout(triggerRandomGlitch, 5000);
+
