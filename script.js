@@ -111,3 +111,36 @@ function triggerRandomGlitch() {
 // Start the glitch cycle
 setTimeout(triggerRandomGlitch, 5000);
 
+// Mini Terminal Popup Logic
+const aboutContent = `I'm a student developer who turns ideas into working products. I build AI tools, experiment fast, and ship consistently instead of overthinking. Most of my work starts as a random idea and ends as something real people can use. I focus on learning by building, not just consuming.
+
+I'm an admin at BVA (Bangalore Vibecoders Association), a 300+ member community where builders come together to create real projects, not just consume content.
+
+I turn ideas into reality. Repeatedly.`;
+
+const folderAbout = document.getElementById("folder-about");
+const popupContainer = document.getElementById("popup-container");
+const closePopup = document.getElementById("close-popup");
+const popupText = document.getElementById("popup-text");
+
+let typePopupInterval;
+
+folderAbout.addEventListener("click", () => {
+    popupContainer.classList.remove("hidden");
+    popupText.textContent = "";
+    clearInterval(typePopupInterval);
+    
+    let charIndex = 0;
+    typePopupInterval = setInterval(() => {
+        popupText.textContent += aboutContent.charAt(charIndex);
+        charIndex++;
+        if (charIndex >= aboutContent.length) {
+            clearInterval(typePopupInterval);
+        }
+    }, 10); // Type very quickly
+});
+
+closePopup.addEventListener("click", () => {
+    popupContainer.classList.add("hidden");
+    clearInterval(typePopupInterval);
+});

@@ -17,7 +17,7 @@
         <!-- Main Hero Section (Hidden Initially) -->
         <div id="hero-section" class="hidden">
             <div class="hero-left">
-                <div class="folder">
+                <div class="folder" id="folder-about">
 <pre>
  ┌─────────┐
  │ ABOUT   │
@@ -53,12 +53,27 @@
                 <br>
                 <p>...AWAITING INPUT <</p>
                 <div class="prompt">
-                    <span><C:\Users\JRiteeshReddy</span>
+                    <span>C:\Users\JRiteeshReddy></span>
                     <span class="blinking-cursor"></span>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Mini Terminal Popup -->
+    <div id="popup-container" class="hidden">
+        <div class="popup-window">
+            <div class="popup-header">
+                <span id="popup-title">ABOUT.EXE</span>
+                <button id="close-popup">[X]</button>
+            </div>
+            <div class="popup-content">
+                <div id="popup-text"></div>
+                <span class="blinking-cursor"></span>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
