@@ -177,6 +177,12 @@ document.addEventListener("mousemove", (e) => {
     if (isDragging && ghostWindow) {
         let newX = e.clientX - dragOffsetX;
         let newY = e.clientY - dragOffsetY;
+        
+        // Quantize movement to create a choppy, low-framerate effect
+        const gridSize = 15;
+        newX = Math.floor(newX / gridSize) * gridSize;
+        newY = Math.floor(newY / gridSize) * gridSize;
+        
         ghostWindow.style.left = newX + "px";
         ghostWindow.style.top = newY + "px";
     }
