@@ -160,6 +160,9 @@ popupHeader.addEventListener("mousedown", (e) => {
     dragOffsetX = e.clientX - rect.left;
     dragOffsetY = e.clientY - rect.top;
     
+    // Prevent text selection globally while dragging
+    document.body.style.userSelect = "none";
+    
     // Create ghost outline
     ghostWindow = document.createElement("div");
     ghostWindow.classList.add("ghost-window");
@@ -190,4 +193,5 @@ document.addEventListener("mouseup", () => {
         ghostWindow = null;
     }
     isDragging = false;
+    document.body.style.userSelect = "";
 });

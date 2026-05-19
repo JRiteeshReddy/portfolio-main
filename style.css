@@ -108,6 +108,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     display: inline-block;
+    user-select: none;
 }
 
 .folder:hover {
@@ -276,6 +277,7 @@ h1 {
     font-weight: bold;
     font-size: 1.2rem;
     cursor: grab; /* Indicate it's draggable */
+    user-select: none;
 }
 
 .popup-header:active {
