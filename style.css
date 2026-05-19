@@ -308,3 +308,11 @@ h1 {
 #popup-text {
     display: inline;
 }
+
+/* Ghost Outline for dragging */
+.ghost-window {
+    position: absolute;
+    border: 2px dashed var(--text-color);
+    pointer-events: none;
+    z-index: 101;
+}

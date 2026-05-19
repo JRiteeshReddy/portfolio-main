@@ -152,23 +152,42 @@ const popupHeader = document.querySelector(".popup-header");
 let isDragging = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
+let ghostWindow = null;
 
 popupHeader.addEventListener("mousedown", (e) => {
     isDragging = true;
     const rect = popupWindow.getBoundingClientRect();
     dragOffsetX = e.clientX - rect.left;
     dragOffsetY = e.clientY - rect.top;
+    
+    // Create ghost outline
+    ghostWindow = document.createElement("div");
+    ghostWindow.classList.add("ghost-window");
+    ghostWindow.style.width = rect.width + "px";
+    ghostWindow.style.height = rect.height + "px";
+    ghostWindow.style.left = rect.left + "px";
+    ghostWindow.style.top = rect.top + "px";
+    document.body.appendChild(ghostWindow);
 });
 
 document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
+    if (isDragging && ghostWindow) {
         let newX = e.clientX - dragOffsetX;
         let newY = e.clientY - dragOffsetY;
-        popupWindow.style.left = newX + "px";
-        popupWindow.style.top = newY + "px";
+        ghostWindow.style.left = newX + "px";
+        ghostWindow.style.top = newY + "px";
     }
 });
 
 document.addEventListener("mouseup", () => {
+    if (isDragging && ghostWindow) {
+        // Move actual window to ghost's final position
+        popupWindow.style.left = ghostWindow.style.left;
+        popupWindow.style.top = ghostWindow.style.top;
+        
+        // Remove ghost
+        document.body.removeChild(ghostWindow);
+        ghostWindow = null;
+    }
     isDragging = false;
 });
