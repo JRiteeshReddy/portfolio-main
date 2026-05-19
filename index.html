@@ -1,331 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>J Riteesh Reddy — Student Developer</title>
-  <meta name="description" content="Personal portfolio of J Riteesh Reddy — I build products, communities, and ideas into reality." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J Riteesh Reddy | Student Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- ===== BLOOD TRAIL CANVAS ===== -->
-  <canvas id="blood-trail"></canvas>
-
-  <!-- ===== MOBILE BLOCKER ===== -->
-  <div id="mobile-blocker" class="mobile-blocker">
-    <div class="mobile-blocker-content">
-      <h2>I'm really sorry.</h2>
-      <p>This portfolio was meticulously built for laptops and desktops, and cannot be accessed on mobile devices.</p>
-    </div>
-  </div>
-
-  <div id="grain"></div>
-
-  <!-- ===== INTRO LOADING SCREEN ===== -->
-  <div id="intro-screen">
-    <video id="intro-video" src="Videos/nocrack.mp4" muted playsinline preload="auto" crossorigin="anonymous"></video>
-    <img id="intro-limg" src="Videos/limg.png" alt="Intro Layer 1">
-    <img id="intro-rimg" src="Videos/rimg.png" alt="Intro Layer 2">
-    <div id="intro-blackout"></div>
-    <div id="intro-overlay"></div>
-    <div id="skip-hint">tap to skip</div>
-  </div>
-
-  <!-- ===== SECRET ADMIN PANEL (EASTER EGG) ===== -->
-  <div id="admin-panel" class="hidden">
-    <div class="admin-content">
-      <h2>Secret Admin Terminal</h2>
-      <div class="admin-stats">
-        <div class="stat">System: Online</div>
-        <div class="stat">Build: v2.4.0</div>
-        <div class="stat">Uptime: 99.9%</div>
-      </div>
-      <p>Authentication Required. Access Denied.</p>
-      <button onclick="closeAdmin()">Return to Portfolio</button>
-    </div>
-  </div>
-
-  <!-- ===== MAIN SITE ===== -->
-  <main id="main-site">
-
-    <!-- NAV -->
-    <nav id="navbar">
-      <div class="nav-logo" id="logo">RITEESH<span class="accent">.</span></div>
-      <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#work">Work</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div style="display: flex; gap: 15px; align-items: center;">
-        <button class="nav-cta hollow-btn" id="hollow-btn" onclick="openHollowTheme()">
-          <img src="Videos/hollow.png" alt="Hollow" class="theme-btn-img" />
-        </button>
-        <button class="nav-cta bankai-btn" id="bankai-btn" onclick="openThemesPanel()">
-          <img src="Videos/bankai.png" alt="Bankai" class="theme-btn-img" />
-        </button>
-      </div>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+    <canvas id="starfield"></canvas>
+    
+    <nav class="navbar">
+        <div class="nav-brand">JRR.</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
     </nav>
 
-    <!-- MOBILE NAV -->
-    <div class="mobile-nav" id="mobile-nav">
-      <ul>
-        <li><a href="#hero" onclick="closeMobileNav()">Home</a></li>
-        <li><a href="#about" onclick="closeMobileNav()">About</a></li>
-        <li><a href="#work" onclick="closeMobileNav()">Work</a></li>
-        <li><a href="#experience" onclick="closeMobileNav()">Experience</a></li>
-        <li><a href="#contact" onclick="closeMobileNav()">Contact</a></li>
-      </ul>
-    </div>
-
-
-    <!-- ===== BANKAI CINEMATIC OVERLAY ===== -->
-    <div id="bankai-overlay" class="bankai-overlay" onclick="skipBankaiAnimation()">
-      <div class="bankai-skip-hint">Tap to skip</div>
-      <img id="bankai-ban" class="bankai-img" src="Videos/BAN.png" alt="BAN" />
-      <img id="bankai-kai" class="bankai-img" src="Videos/KAI.png" alt="KAI" />
-      <img id="hollow-hole" class="hollow-img" src="Videos/hole.png" alt="Hole" />
-    </div>
-
-    <section id="hero">
-      <div class="hero-video-wrap">
-        <video id="hero-video" src="Videos/hero.mp4" autoplay muted loop playsinline></video>
-        <img id="hero-hollow-img" src="Videos/25.png" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" alt="Hollow Hero" />
-        <div class="hero-video-overlay"></div>
-      </div>
-      <div class="hero-content left-align reveal">
-        <p class="hero-label">Student Developer</p>
-        <h1 class="hero-name-main">J Riteesh</h1>
-        <h1 class="hero-name-sub">Reddy</h1>
-        <p class="hero-sub left-align">I build products, communities, and ideas into reality.</p>
-        <div class="hero-actions left-align">
-          <a href="#work" class="btn-primary">View Projects</a>
-          <a href="#contact" class="btn-ghost">Contact Me</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== ABOUT SECTION ===== -->
-    <section id="about">
-      <div class="about-video-wrap">
-        <video id="about-video" src="Videos/hero2.mp4" muted loop playsinline preload="none"></video>
-        <img id="about-gif" src="Videos/qwerty.gif" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" alt="About GIF" />
-        <img id="about-hollow-img" src="Videos/26.png" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" alt="Hollow About" />
-        <div class="about-video-overlay"></div>
-      </div>
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-text reveal">
-            <div class="section-label">About Me</div>
-            <h2 class="section-title"><span class="title-line"></span>I turn ideas into reality. <span class="accent-text-inline">Repeatedly.</span></h2>
-            <p>I'm a student developer who turns ideas into working products. I build AI tools, experiment fast, and ship consistently instead of overthinking. Most of my work starts as a random idea and ends as something real people can use. I focus on learning by building, not just consuming.</p>
-            <p>I'm an admin at BVA <span class="accent-text-inline">(Bangalore Vibecoders Association)</span>, a 300+ member community where builders come together to create real projects, not just consume content.</p>
-            <div class="about-stats">
-              <div class="stat">
-                <span class="stat-num">BVA</span>
-                <span class="stat-label">ADMIN</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat">
-                <span class="stat-num">VIBE CODE</span>
-                <span class="stat-label">FOCUS</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat">
-                <span class="stat-num">300+</span>
-                <span class="stat-label">DEVS COMMUNITY</span>
-              </div>
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content fade-in-up">
+                <p class="greeting">Hi, I am</p>
+                <h1 class="name">J Riteesh Reddy</h1>
+                <h2 class="title">Student Developer <span class="dot">.</span></h2>
+                <p class="tagline">I build products, communities, and ideas into reality.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn primary">View Projects</a>
+                    <a href="#contact" class="btn secondary">Contact Me</a>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- ===== PROJECTS SECTION ===== -->
-    <section id="work">
-      <div id="work-bankai-bg" class="work-bankai-bg"></div>
-      <div class="container">
-        <div class="section-label">Work</div>
-        <h2 class="section-title">Selected Projects</h2>
-      </div>
-
-      <!-- Infinite Marquee Ticker -->
-      <div class="projects-ticker-wrap">
-        <div class="projects-ticker" id="projects-ticker">
-          <!-- Cards duplicated in JS for infinite loop -->
-        </div>
-      </div>
-
-      <!-- View All Button -->
-      <div class="container work-cta-wrap">
-        <button class="view-all-btn" id="view-all-btn" onclick="openProjectsModal()">
-          <span>View All Projects</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ===== PROJECTS MODAL ===== -->
-    <div id="projects-modal" class="modal-overlay" aria-hidden="true">
-      <div class="modal-box">
-        <div class="modal-header">
-          <div>
-            <span class="modal-label">◈ All Projects</span>
-            <h3 class="modal-title">Everything I've Built</h3>
-          </div>
-          <button class="modal-close" id="modal-close-btn" onclick="closeProjectsModal()" aria-label="Close">✕</button>
-        </div>
-        <div id="projects-modal-grid" class="projects-modal-grid">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PROJECT DETAIL MODAL ===== -->
-    <div id="detail-modal" class="detail-overlay" aria-hidden="true">
-      <div class="detail-box">
-        <button class="detail-close" onclick="closeDetailModal()" aria-label="Close">✕</button>
-        <div id="detail-img-wrap" class="detail-img-wrap"></div>
-        <div class="detail-body">
-          <h2 id="detail-title" class="detail-title"></h2>
-          <p id="detail-desc" class="detail-desc"></p>
-          <a id="detail-cta" href="#" target="_blank" class="detail-cta">View Project →</a>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ===== EXPERIENCE SECTION ===== -->
-    <section id="experience">
-      <div class="container">
-        <div class="section-label">Beyond The Screen</div>
-        <h2 class="section-title">Extra Curricular Activities</h2>
-        <div class="experience-list reveal">
-          <div class="exp-item">
-            <div class="exp-year">VOL</div>
-            <div class="exp-info">
-              <h3>Event Volunteer</h3>
-              <p>Volunteered in multiple events including Codeavour 7.0, Comic Con (×2), and several other university events — handling on-ground coordination and attendee experience.</p>
+        <section id="about" class="about section">
+            <div class="section-content fade-in-up">
+                <h2 class="section-title">I turn ideas into reality. Repeatedly.</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p>I'm a student developer who turns ideas into working products. I build AI tools, experiment fast, and ship consistently instead of overthinking. Most of my work starts as a random idea and ends as something real people can use. I focus on learning by building, not just consuming.</p>
+                        <p>I'm an admin at BVA (Bangalore Vibecoders Association), a 300+ member community where builders come together to create real projects, not just consume content.</p>
+                    </div>
+                    <div class="about-highlights">
+                        <div class="highlight-card">
+                            <h3>BVA</h3>
+                            <p>Admin</p>
+                        </div>
+                        <div class="highlight-card">
+                            <h3>Vibe Code</h3>
+                            <p>Focus</p>
+                        </div>
+                        <div class="highlight-card">
+                            <h3>300+</h3>
+                            <p>Devs Community</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-year">SLA</div>
-            <div class="exp-info">
-              <h3>Student Life Associate</h3>
-              <p>Organized university-level events on multiple occasions and mentored multiple clubs assigned to me, bridging student leadership and institutional goals.</p>
-            </div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-year">HOD</div>
-            <div class="exp-info">
-              <h3>Former HOD — Gaming Affinity</h3>
-              <p>Served as Head of Department for the Gaming Affinity vertical at Viral Fission (Virtual), leading the gaming community and content direction.</p>
-            </div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-year">VP</div>
-            <div class="exp-info">
-              <h3>Vice President — Anime & Manga Club</h3>
-              <p>Led marketing, event planning, and recruitment strategies. Organized Anime Day, Student Induction Program (SIP), and stall events — gaining 100+ followers and 30+ recruitments. Designed promotional materials and managed social media engagement.</p>
-            </div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-year">DES</div>
-            <div class="exp-info">
-              <h3>Design Lead — Multiple Clubs</h3>
-              <p>Led design and marketing efforts across clubs. Created posters, promotional materials, and social media content for various events and campaigns.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- ===== SKILLS SECTION ===== -->
-    <section id="skills">
-      <div class="container">
-        <div class="section-label">What I Bring</div>
-        <h2 class="section-title">Skills & Tools</h2>
-        <div class="skills-badges reveal">
-          <span class="skill-badge">English Proficiency (Written)</span>
-          <span class="skill-badge">Event Management</span>
-          <span class="skill-badge">Digital Marketing</span>
-          <span class="skill-badge">Graphic Designing</span>
-          <span class="skill-badge">Vibe Coding</span>
-          <span class="skill-badge">Web Development</span>
-          <span class="skill-badge">Android App Development</span>
-          <span class="skill-badge">UI & UX Design</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== CONTACT SECTION ===== -->
-    <section id="contact">
-      <div class="container">
-        <div class="section-label">Reach Out</div>
-        <div class="contact-wrap reveal">
-          <div class="contact-left">
-            <h2 class="contact-title">Let's turn an <span class="accent-text">idea</span> into reality</h2>
-            <p>I'm always open to collaborations, community building, or discussing the next big thing in AI.</p>
-            <div class="contact-socials">
-              <a href="mailto:jriteeshreddy@gmail.com" class="social-link">Email</a>
-              <a href="https://www.linkedin.com/in/j-riteesh-reddy" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
-              <a href="https://github.com/JRiteeshReddy" target="_blank" rel="noopener" class="social-link">GitHub</a>
+        <section id="experience" class="experience section">
+            <div class="section-content fade-in-up">
+                <h2 class="section-title">Beyond The Screen <br><span class="subtitle">Extra Curricular Activities</span></h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Event Volunteer</h3>
+                            <p>Volunteered in multiple events including Codeavour 7.0, Comic Con (x2), and several university events — handling on-ground coordination and attendee experience.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Student Life Associate</h3>
+                            <p>Organized university-level events on multiple occasions and mentored multiple clubs assigned to me, bridging student leadership and institutional goals.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Former HOD — Gaming Affinity</h3>
+                            <p>Served as Head of Department for the Gaming Affinity vertical at Viral Fission (Virtual), leading the gaming community and content direction.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Vice President — Anime & Manga Club</h3>
+                            <p>Led marketing, event planning, and recruitment strategies. Organized Anime Day, Student Induction Program (SIP), and stall events — gaining 100+ followers and 30+ recruitments.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h3>Design Lead — Multiple Clubs</h3>
+                            <p>Led design and marketing efforts across clubs. Created posters, promotional materials, and social media content for various events and campaigns.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
 
-          <form id="contact-form" class="contact-form">
-            <div data-fs-error class="form-error" style="display:none"></div>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="Your name" required />
+        <section id="skills" class="skills section">
+            <div class="section-content fade-in-up">
+                <h2 class="section-title">Skills & Tools</h2>
+                <div class="skills-container">
+                    <span class="skill-pill">English Proficiency (Written)</span>
+                    <span class="skill-pill">Event Management</span>
+                    <span class="skill-pill">Digital Marketing</span>
+                    <span class="skill-pill">Graphic Designing</span>
+                    <span class="skill-pill">Vibe Coding</span>
+                    <span class="skill-pill">Web Development</span>
+                    <span class="skill-pill">Android App Development</span>
+                    <span class="skill-pill">UI & UX Design</span>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="your@email.com" required />
+        </section>
+
+        <section id="contact" class="contact section">
+            <div class="section-content fade-in-up">
+                <h2 class="section-title">Let's Build Something.</h2>
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.</p>
+                <a href="mailto:hello@example.com" class="btn primary lg-btn">Get In Touch</a>
             </div>
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" placeholder="Let's build..." required></textarea>
-            </div>
-            <button type="submit" class="btn-primary full-width" id="submit-btn">
-              Send Message ↗
-            </button>
-          </form>
+        </section>
+    </main>
 
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== MESSAGE SENT POPUP ===== -->
-    <div id="msg-popup" class="msg-popup-overlay" aria-hidden="true">
-      <div class="msg-popup-box">
-        <div class="msg-popup-icon">✓</div>
-        <h3 class="msg-popup-title">Message Sent!</h3>
-        <p class="msg-popup-body">Thanks for reaching out. Riteesh will get back to you shortly.</p>
-        <button class="msg-popup-close" onclick="closeMsgPopup()">Got it</button>
-      </div>
-    </div>
-
-    <!-- ===== FOOTER ===== -->
     <footer>
-      <div class="container">
-        <div class="footer-inner">
-          <div class="footer-logo">RITEESH<span class="accent">.</span></div>
-          <p class="footer-copy">Built by Riteesh ⚡</p>
-          <a href="#hero" class="footer-back-top">↑</a>
-        </div>
-      </div>
+        <p>&copy; 2026 J Riteesh Reddy. Built with vibe.</p>
     </footer>
 
-  </main>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
