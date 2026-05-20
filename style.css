@@ -45,7 +45,7 @@ body {
     left: 0;
     bottom: 0;
     right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(0, 255, 65, 0.04), rgba(0, 0, 0, 0.1), rgba(0, 255, 65, 0.04));
     z-index: 2;
     background-size: 100% 4px, 6px 100%; /* Doubled from previous to make scanlines/pixels chunkier */
     pointer-events: none;
@@ -112,8 +112,8 @@ body {
 }
 
 .folder:hover {
-    color: #fff;
-    text-shadow: 0 0 15px #00ff41;
+    color: var(--text-color);
+    text-shadow: 0 0 10px var(--text-color), 0 0 20px var(--text-color);
     transform: scale(1.05);
 }
 
@@ -181,14 +181,14 @@ h1 {
 
 .glitch::before {
     left: 2px;
-    text-shadow: -2px 0 #ff00ff;
+    text-shadow: -2px 0 #00661a; /* Darker forest green shadow */
     clip: rect(24px, 550px, 90px, 0);
     animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 
 .glitch::after {
     left: -2px;
-    text-shadow: -2px 0 #00ffff;
+    text-shadow: 2px 0 var(--text-color); /* Bright hacker green shadow */
     clip: rect(85px, 550px, 140px, 0);
     animation: glitch-anim 2.5s infinite linear alternate-reverse;
 }
@@ -295,7 +295,9 @@ h1 {
 }
 
 .close-popup:hover {
-    color: #ff0000;
+    color: var(--text-color);
+    background: var(--bg-color);
+    box-shadow: 0 0 8px var(--text-color);
 }
 
 .popup-content {
@@ -342,9 +344,14 @@ h1 {
 .popup-content::-webkit-scrollbar-thumb {
     background: var(--text-color);
     border: 3px solid #050d05; /* Inset gap effect */
-    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #000000; /* Windows 95 style button shadow */
+    box-shadow: inset 1.5px 1.5px 0px var(--text-color), inset -1.5px -1.5px 0px #000000; /* Green & black 3D border */
 }
 
 .popup-content::-webkit-scrollbar-thumb:hover {
-    background: #ffffff;
+    background: var(--text-color);
+    box-shadow: inset 1.5px 1.5px 0px var(--text-color), inset -1.5px -1.5px 0px #000000, 0 0 8px var(--text-color); /* Add glow on hover */
+}
+
+.popup-content::-webkit-scrollbar-thumb:active {
+    box-shadow: inset 1.5px 1.5px 0px #000000, inset -1.5px -1.5px 0px var(--text-color); /* Pressed 3D effect */
 }
