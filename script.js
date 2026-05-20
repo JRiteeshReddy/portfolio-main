@@ -207,7 +207,7 @@ const contactContent = `CONTACT DETAILS:
 Name: J Riteesh Reddy
 Title: Student Developer
 GitHub: https://github.com/JRiteeshReddy
-Email: contact@jriteeshreddy.dev
+Email: jriteeshreddy@gmail.com
 Status: Open for opportunities & collaborations.
 
 ---
