@@ -232,6 +232,54 @@ function linkifyPopup(element) {
     });
 }
 
+function appendContactForm(container) {
+    const formDiv = document.createElement("div");
+    formDiv.classList.add("contact-form-container");
+    formDiv.innerHTML = `
+        <form id="contact-form" class="retro-form">
+            <div class="form-group">
+                <label for="form-name">NAME</label>
+                <input type="text" id="form-name" name="name" placeholder="YOUR NAME" required autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <label for="form-email">EMAIL</label>
+                <input type="email" id="form-email" name="email" placeholder="YOUR@EMAIL.COM" required autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <label for="form-message">MESSAGE</label>
+                <textarea id="form-message" name="message" rows="4" placeholder="LET'S BUILD..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">SEND MESSAGE ↗</button>
+            <div id="form-status" class="form-status hidden"></div>
+        </form>
+    `;
+    container.appendChild(formDiv);
+
+    const form = formDiv.querySelector("#contact-form");
+    const statusEl = formDiv.querySelector("#form-status");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const submitBtn = form.querySelector(".submit-btn");
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = "TRANSMITTING...";
+        submitBtn.disabled = true;
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            statusEl.textContent = ">>> TRANSMISSION SECURE: MESSAGE SENT SUCCESSFULLY! <<<";
+            statusEl.className = "form-status success";
+            form.reset();
+        } catch (err) {
+            statusEl.textContent = ">>> ERROR: TRANSMISSION FAILED. TRY AGAIN. <<<";
+            statusEl.className = "form-status error";
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+}
+
 function openPopup(title, content, width = "600px") {
     // If popup already exists, bring it to the front
     if (activePopups[title]) {
@@ -288,6 +336,9 @@ function openPopup(title, content, width = "600px") {
         if (charIndex >= content.length) {
             clearInterval(typeInterval);
             linkifyPopup(popupText);
+            if (title === "CONTACT.EXE") {
+                appendContactForm(popupContentEl);
+            }
         }
     }, 10);
 
@@ -338,7 +389,7 @@ document.getElementById("folder-about").addEventListener("click", () => openPopu
 document.getElementById("folder-projects").addEventListener("click", () => openPopup("PROJECTS.EXE", projectsContent, "640px"));
 document.getElementById("folder-activity").addEventListener("click", () => openPopup("ACTIVITY.EXE", activityContent, "680px"));
 document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent, "460px"));
-document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent, "500px"));
+document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent, "560px"));
 
 // Global Document listeners for dragging ghost outline
 document.addEventListener("mousemove", (e) => {

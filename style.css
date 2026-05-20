@@ -369,3 +369,93 @@ h1 {
     color: var(--bg-color);
     box-shadow: 0 0 5px var(--text-color);
 }
+
+/* Contact Form Component */
+.contact-form-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--text-color);
+    width: 100%;
+}
+
+.retro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-color);
+    letter-spacing: 1px;
+}
+
+.form-group input,
+.form-group textarea {
+    background-color: var(--bg-color);
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    padding: 12px;
+    width: 100%;
+    outline: none;
+    border-radius: 0px;
+    transition: box-shadow 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #00661a; /* Dark forest green placeholder */
+    opacity: 0.8;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    box-shadow: 0 0 8px var(--text-color);
+}
+
+.submit-btn {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    border: 2px solid var(--text-color);
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 14px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 0 12px var(--text-color);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-status {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--text-color);
+    border: 2px dashed var(--text-color);
+    padding: 10px;
+}
+
