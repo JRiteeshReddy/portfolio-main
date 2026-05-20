@@ -304,13 +304,13 @@ h1 {
     padding: 20px;
     overflow-y: auto;
     flex: 1;
-    white-space: pre-wrap;
     font-size: 1.5rem;
     line-height: 1.4;
 }
 
 .popup-text {
     display: inline;
+    white-space: pre-wrap;
 }
 
 /* Ghost Outline for dragging */
