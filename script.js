@@ -392,7 +392,7 @@ async function submitTerminalForm(historyContainer, data, container, transmissio
                 container.scrollTop = container.scrollHeight;
                 resolve();
             }, delay);
-            transmissionTimeouts.push(timeoutId);
+            transmissionTimeouts.ids.push(timeoutId);
         });
     };
 
