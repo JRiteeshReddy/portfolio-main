@@ -291,14 +291,22 @@ function appendContactForm(container) {
             if (currentStep === 1) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
-                    const errLine = document.createElement("div");
-                    errLine.classList.add("terminal-history-line", "terminal-error-line");
-                    errLine.textContent = ">>> WARNING: INVALID EMAIL PROTOCOL. RE-ENTER EMAIL. <<<";
-                    historyContainer.appendChild(errLine);
+                    let errLine = historyContainer.querySelector(".terminal-validation-error");
+                    if (!errLine) {
+                        errLine = document.createElement("div");
+                        errLine.classList.add("terminal-history-line", "terminal-error-line", "terminal-validation-error");
+                        errLine.textContent = ">>> WARNING: INVALID EMAIL PROTOCOL. RE-ENTER EMAIL. <<<";
+                        historyContainer.appendChild(errLine);
+                    }
                     hiddenInput.value = "";
                     inputMirror.textContent = "";
                     container.scrollTop = container.scrollHeight;
                     return;
+                } else {
+                    const errLine = historyContainer.querySelector(".terminal-validation-error");
+                    if (errLine) {
+                        historyContainer.removeChild(errLine);
+                    }
                 }
             }
 
@@ -409,7 +417,10 @@ async function submitTerminalForm(historyContainer, data, container, transmissio
             })
         });
         responseOk = response.ok;
+        const resData = await response.json();
+        console.log("Formspree connection attempt completed. Status:", response.status, "Data:", resData);
     } catch (err) {
+        console.error("Formspree submission error details:", err);
         responseOk = false;
     }
 
