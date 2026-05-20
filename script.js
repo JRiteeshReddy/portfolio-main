@@ -211,7 +211,8 @@ Email: contact@jriteeshreddy.dev
 Status: Open for opportunities & collaborations.
 
 ---
-Please feel free to reach out via GitHub or email!`;
+YOU CAN TRANSMIT A MESSAGE DIRECTLY THROUGH THIS TERMINAL GUESTBOOK.
+PLEASE COMPLY WITH THE FOLLOWING HANDSHAKE PROMPTS:`;
 
 const popupContainer = document.getElementById("popup-container");
 let zIndexCounter = 100;
@@ -234,50 +235,115 @@ function linkifyPopup(element) {
 
 function appendContactForm(container) {
     const formDiv = document.createElement("div");
-    formDiv.classList.add("contact-form-container");
+    formDiv.classList.add("terminal-form-container");
     formDiv.innerHTML = `
-        <form id="contact-form" class="retro-form">
-            <div class="form-group">
-                <label for="form-name">NAME</label>
-                <input type="text" id="form-name" name="name" placeholder="YOUR NAME" required autocomplete="off" />
+        <div class="terminal-form">
+            <div class="terminal-history"></div>
+            <div class="terminal-active-line">
+                <span class="terminal-prompt-label">NAME: &gt; </span>
+                <span class="terminal-input-mirror"></span>
+                <span class="blinking-cursor"></span>
+                <input type="text" class="terminal-hidden-input" autocomplete="off" spellcheck="false" />
             </div>
-            <div class="form-group">
-                <label for="form-email">EMAIL</label>
-                <input type="email" id="form-email" name="email" placeholder="YOUR@EMAIL.COM" required autocomplete="off" />
-            </div>
-            <div class="form-group">
-                <label for="form-message">MESSAGE</label>
-                <textarea id="form-message" name="message" rows="4" placeholder="LET'S BUILD..." required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">SEND MESSAGE ↗</button>
-            <div id="form-status" class="form-status hidden"></div>
-        </form>
+        </div>
     `;
     container.appendChild(formDiv);
 
-    const form = formDiv.querySelector("#contact-form");
-    const statusEl = formDiv.querySelector("#form-status");
+    const historyContainer = formDiv.querySelector(".terminal-history");
+    const activeLine = formDiv.querySelector(".terminal-active-line");
+    const promptLabel = formDiv.querySelector(".terminal-prompt-label");
+    const inputMirror = formDiv.querySelector(".terminal-input-mirror");
+    const hiddenInput = formDiv.querySelector(".terminal-hidden-input");
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const submitBtn = form.querySelector(".submit-btn");
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = "TRANSMITTING...";
-        submitBtn.disabled = true;
+    // Auto-focus input on popup complete
+    setTimeout(() => hiddenInput.focus(), 150);
 
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            statusEl.textContent = ">>> TRANSMISSION SECURE: MESSAGE SENT SUCCESSFULLY! <<<";
-            statusEl.className = "form-status success";
-            form.reset();
-        } catch (err) {
-            statusEl.textContent = ">>> ERROR: TRANSMISSION FAILED. TRY AGAIN. <<<";
-            statusEl.className = "form-status error";
-        } finally {
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+    // Clicking anywhere in the container focuses the input (for keyboard display on mobile too)
+    container.addEventListener("click", () => {
+        hiddenInput.focus();
+    });
+
+    const steps = [
+        { key: "name", label: "NAME: &gt; " },
+        { key: "email", label: "EMAIL: &gt; " },
+        { key: "message", label: "MESSAGE: &gt; " }
+    ];
+    let currentStep = 0;
+    const data = { name: "", email: "", message: "" };
+
+    hiddenInput.addEventListener("input", () => {
+        inputMirror.textContent = hiddenInput.value;
+    });
+
+    hiddenInput.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const value = hiddenInput.value.trim();
+            if (!value) return;
+
+            // Email validation
+            if (currentStep === 1) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    const errLine = document.createElement("div");
+                    errLine.classList.add("terminal-history-line", "terminal-error-line");
+                    errLine.textContent = ">>> WARNING: INVALID EMAIL PROTOCOL. RE-ENTER EMAIL. <<<";
+                    historyContainer.appendChild(errLine);
+                    hiddenInput.value = "";
+                    inputMirror.textContent = "";
+                    container.scrollTop = container.scrollHeight;
+                    return;
+                }
+            }
+
+            // Save key responses
+            const step = steps[currentStep];
+            data[step.key] = value;
+
+            // Print step to static history
+            const historyLine = document.createElement("div");
+            historyLine.classList.add("terminal-history-line");
+            historyLine.innerHTML = `<span class="terminal-prompt-label">${step.key.toUpperCase()}:</span> ${value}`;
+            historyContainer.appendChild(historyLine);
+
+            hiddenInput.value = "";
+            inputMirror.textContent = "";
+
+            currentStep++;
+
+            if (currentStep < steps.length) {
+                promptLabel.innerHTML = steps[currentStep].label;
+            } else {
+                activeLine.style.display = "none";
+                hiddenInput.disabled = true;
+                await submitTerminalForm(historyContainer, data, container);
+            }
+            container.scrollTop = container.scrollHeight;
         }
     });
+}
+
+async function submitTerminalForm(historyContainer, data, container) {
+    const printLine = (text, delay = 0, styleClass = "") => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const line = document.createElement("div");
+                line.classList.add("terminal-history-line");
+                if (styleClass) line.classList.add(styleClass);
+                line.textContent = text;
+                historyContainer.appendChild(line);
+                container.scrollTop = container.scrollHeight;
+                resolve();
+            }, delay);
+        });
+    };
+
+    await printLine("CONNECTING TO PORTFOLIO GUESTBOOK SECURE UPLINK...", 200);
+    await printLine("UPLINK ESTABLISHED. HANDSHAKE PROTOCOL: SECURE.", 800);
+    await printLine(`TRANSMITTING PAYLOAD FROM CLIENT: ${data.name.toUpperCase()}...`, 500);
+    await printLine("UPLOADING PACKETS: [====================] 100%", 1000);
+    await printLine(">>> SECURE TRANSACTION: GUESTBOOK WRITE SUCCESSFUL! <<<", 500, "terminal-success-box");
+    await printLine("GUESTBOOK SESSION CLOSED. DISCONNECTING CLIENT...", 600);
 }
 
 function openPopup(title, content, width = "600px") {
