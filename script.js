@@ -392,12 +392,55 @@ async function submitTerminalForm(historyContainer, data, container, transmissio
     await printLine("UPLINK ESTABLISHED. HANDSHAKE PROTOCOL: SECURE.", 800);
     if (transmissionTimeouts.isAborted) return;
     await printLine(`TRANSMITTING PAYLOAD FROM CLIENT: ${data.name.toUpperCase()}...`, 500);
+
+    // Start network request to Formspree
+    let responseOk = false;
+    try {
+        const response = await fetch("https://formspree.io/f/mnjraenn", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                name: data.name,
+                email: data.email,
+                message: data.message
+            })
+        });
+        responseOk = response.ok;
+    } catch (err) {
+        responseOk = false;
+    }
+
     if (transmissionTimeouts.isAborted) return;
-    await printLine("UPLOADING PACKETS: [====================] 100%", 1000);
-    if (transmissionTimeouts.isAborted) return;
-    await printLine(">>> SECURE TRANSACTION: GUESTBOOK WRITE SUCCESSFUL! <<<", 500, "terminal-success-box");
-    if (transmissionTimeouts.isAborted) return;
-    await printLine("GUESTBOOK SESSION CLOSED. DISCONNECTING CLIENT...", 600);
+
+    if (responseOk) {
+        await printLine("UPLOADING PACKETS: [====================] 100%", 500);
+        if (transmissionTimeouts.isAborted) return;
+        await printLine(">>> SECURE TRANSACTION: GUESTBOOK WRITE SUCCESSFUL! <<<", 500, "terminal-success-box");
+        if (transmissionTimeouts.isAborted) return;
+        await printLine("GUESTBOOK SESSION CLOSED. DISCONNECTING CLIENT...", 600);
+    } else {
+        await printLine(">>> TRANSMISSION FAILURE: PROTOCOL OVERFLOW OR SERVER OFFLINE. <<<", 500, "terminal-error-line");
+        if (transmissionTimeouts.isAborted) return;
+        await printLine("UPLINK DISCONNECTED. PRESS ANY KEY OR CLICK A LOG TO CORRECT.", 600);
+        
+        // Re-enable the form at the MESSAGE step so they can try again
+        const activeLine = container.querySelector(".terminal-active-line");
+        const hiddenInput = container.querySelector(".terminal-hidden-input");
+        const promptLabel = container.querySelector(".terminal-prompt-label");
+        const inputMirror = container.querySelector(".terminal-input-mirror");
+        
+        if (activeLine && hiddenInput) {
+            activeLine.style.display = "flex";
+            hiddenInput.disabled = false;
+            hiddenInput.value = data.message;
+            inputMirror.textContent = data.message;
+            promptLabel.innerHTML = "MESSAGE: &gt; ";
+            hiddenInput.focus();
+        }
+    }
 }
 
 function openPopup(title, content, width = "600px") {
