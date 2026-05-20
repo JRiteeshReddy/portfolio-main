@@ -456,6 +456,8 @@ function openPopup(title, content, width = "600px") {
         if (charIndex >= content.length) {
             clearInterval(typeInterval);
             linkifyPopup(popupText);
+            const mainCursor = popup.querySelector(".popup-content > .blinking-cursor");
+            if (mainCursor) mainCursor.style.display = "none";
             if (title === "CONTACT.EXE") {
                 appendContactForm(popupContentEl);
             }
