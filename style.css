@@ -469,5 +469,69 @@ h1 {
     text-decoration: underline;
 }
 
+/* Mobile Responsive Optimization */
+@media (max-width: 768px) {
+    body {
+        font-size: 18px; /* Slightly smaller typography for small screens */
+        padding: 10px;
+        overflow: hidden;
+    }
+    
+    #hero-section {
+        flex-direction: column-reverse; /* Folders at the bottom, name at the top */
+        justify-content: center;
+        gap: 15px;
+        padding: 5px 0;
+        overflow-y: auto;
+    }
+    
+    .hero-left {
+        flex: none;
+        width: 100%;
+        padding-left: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .hero-right {
+        flex: none;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        padding-right: 0;
+    }
+    
+    .folder pre {
+        font-size: 1.1rem; /* Scale down ASCII art folders */
+    }
+    
+    .popup-window {
+        top: 2% !important;
+        left: 2% !important;
+        width: 96% !important;
+        height: 96% !important;
+        max-width: 96vw !important;
+        max-height: 96vh !important;
+        box-shadow: 6px 6px 0px rgba(0, 255, 65, 0.3) !important;
+    }
+    
+    .popup-content {
+        padding: 12px;
+        font-size: 1.1rem; /* Slightly smaller popup text to avoid overflow */
+    }
+    
+    .crt::before {
+        opacity: 0.75; /* Slightly less intense scanlines on mobile for better text clarity */
+    }
+    
+    .close-popup {
+        padding: 4px 10px;
+        font-size: 1.3rem;
+    }
+}
+
 
 
