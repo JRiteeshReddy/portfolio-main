@@ -118,7 +118,7 @@ I'm an admin at BVA (Bangalore Vibecoders Association), a 300+ member community 
 
 I turn ideas into reality. Repeatedly.`;
 
-const extraCurricularContent = `BEYOND THE SCREEN - EXTRA CURRICULAR ACTIVITIES:
+const activityContent = `BEYOND THE SCREEN - ACTIVITIES:
 
 1. EVENT VOLUNTEER
 Volunteered in multiple events including Codeavour 7.0, Comic Con (x2), and several university events — handling on-ground coordination and attendee experience.
@@ -281,7 +281,7 @@ function openPopup(title, content, width = "600px") {
 
 document.getElementById("folder-about").addEventListener("click", () => openPopup("ABOUT.EXE", aboutContent, "560px"));
 document.getElementById("folder-projects").addEventListener("click", () => openPopup("PROJECTS.EXE", projectsContent, "640px"));
-document.getElementById("folder-extra").addEventListener("click", () => openPopup("EXTRA_CURRICULAR.EXE", extraCurricularContent, "750px"));
+document.getElementById("folder-activity").addEventListener("click", () => openPopup("ACTIVITY.EXE", activityContent, "680px"));
 document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent, "460px"));
 document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent, "500px"));
 
