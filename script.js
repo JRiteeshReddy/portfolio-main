@@ -158,26 +158,104 @@ Status: Open for opportunities & collaborations.
 Please feel free to reach out via GitHub or email!`;
 
 const popupContainer = document.getElementById("popup-container");
-const closePopup = document.getElementById("close-popup");
-const popupText = document.getElementById("popup-text");
-const popupTitle = document.getElementById("popup-title");
+let zIndexCounter = 100;
+const activePopups = {};
 
-let typePopupInterval;
+let draggedPopup = null;
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+let ghostWindow = null;
 
 function openPopup(title, content) {
-    popupTitle.textContent = title;
-    popupContainer.classList.remove("hidden");
-    popupText.textContent = "";
-    clearInterval(typePopupInterval);
-    
+    // If popup already exists, bring it to the front
+    if (activePopups[title]) {
+        const popup = activePopups[title];
+        zIndexCounter++;
+        popup.style.zIndex = zIndexCounter;
+        return;
+    }
+
+    // Create a new popup window element
+    const popup = document.createElement("div");
+    popup.classList.add("popup-window");
+    zIndexCounter++;
+    popup.style.zIndex = zIndexCounter;
+
+    // Cascade positioning slightly to avoid overlapping perfectly
+    const offset = Object.keys(activePopups).length * 25;
+    popup.style.left = `calc(15% + ${offset}px)`;
+    popup.style.top = `calc(15% + ${offset}px)`;
+
+    popup.innerHTML = `
+        <div class="popup-header">
+            <span class="popup-title">${title}</span>
+            <button class="close-popup">[X]</button>
+        </div>
+        <div class="popup-content">
+            <div class="popup-text"></div>
+            <span class="blinking-cursor"></span>
+        </div>
+    `;
+
+    popupContainer.appendChild(popup);
+    activePopups[title] = popup;
+
+    const popupText = popup.querySelector(".popup-text");
+    const closeBtn = popup.querySelector(".close-popup");
+    const header = popup.querySelector(".popup-header");
+
+    // Dynamic fast typing effect
     let charIndex = 0;
-    typePopupInterval = setInterval(() => {
+    let typeInterval = setInterval(() => {
         popupText.textContent += content.charAt(charIndex);
         charIndex++;
         if (charIndex >= content.length) {
-            clearInterval(typePopupInterval);
+            clearInterval(typeInterval);
         }
-    }, 10); // Type very quickly
+    }, 10);
+
+    // Bring popup to front on click/interaction
+    popup.addEventListener("mousedown", () => {
+        zIndexCounter++;
+        popup.style.zIndex = zIndexCounter;
+    });
+
+    // Close popup handler
+    closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent triggering window selection/mousedown
+        clearInterval(typeInterval);
+        popupContainer.removeChild(popup);
+        delete activePopups[title];
+    });
+
+    // Header drag handler
+    header.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        draggedPopup = popup;
+        
+        // Also bring it to front
+        zIndexCounter++;
+        popup.style.zIndex = zIndexCounter;
+
+        const rect = popup.getBoundingClientRect();
+        dragOffsetX = e.clientX - rect.left;
+        dragOffsetY = e.clientY - rect.top;
+
+        // Prevent text selection globally while dragging
+        document.body.style.userSelect = "none";
+
+        // Create ghost outline
+        ghostWindow = document.createElement("div");
+        ghostWindow.classList.add("ghost-window");
+        ghostWindow.style.width = rect.width + "px";
+        ghostWindow.style.height = rect.height + "px";
+        ghostWindow.style.left = rect.left + "px";
+        ghostWindow.style.top = rect.top + "px";
+        // Ghost window is always on top of the dragged window
+        ghostWindow.style.zIndex = zIndexCounter + 1;
+        document.body.appendChild(ghostWindow);
+    });
 }
 
 document.getElementById("folder-about").addEventListener("click", () => openPopup("ABOUT.EXE", aboutContent));
@@ -185,64 +263,31 @@ document.getElementById("folder-work").addEventListener("click", () => openPopup
 document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent));
 document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent));
 
-closePopup.addEventListener("click", () => {
-    popupContainer.classList.add("hidden");
-    clearInterval(typePopupInterval);
-});
-
-// Draggable Popup Logic
-const popupWindow = document.querySelector(".popup-window");
-const popupHeader = document.querySelector(".popup-header");
-
-let isDragging = false;
-let dragOffsetX = 0;
-let dragOffsetY = 0;
-let ghostWindow = null;
-
-popupHeader.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    const rect = popupWindow.getBoundingClientRect();
-    dragOffsetX = e.clientX - rect.left;
-    dragOffsetY = e.clientY - rect.top;
-    
-    // Prevent text selection globally while dragging
-    document.body.style.userSelect = "none";
-    
-    // Create ghost outline
-    ghostWindow = document.createElement("div");
-    ghostWindow.classList.add("ghost-window");
-    ghostWindow.style.width = rect.width + "px";
-    ghostWindow.style.height = rect.height + "px";
-    ghostWindow.style.left = rect.left + "px";
-    ghostWindow.style.top = rect.top + "px";
-    document.body.appendChild(ghostWindow);
-});
-
+// Global Document listeners for dragging ghost outline
 document.addEventListener("mousemove", (e) => {
     if (isDragging && ghostWindow) {
         let newX = e.clientX - dragOffsetX;
         let newY = e.clientY - dragOffsetY;
-        
-        // Quantize movement to create a choppy, low-framerate effect
+
+        // Snappy grid step positioning
         const gridSize = 15;
         newX = Math.floor(newX / gridSize) * gridSize;
         newY = Math.floor(newY / gridSize) * gridSize;
-        
+
         ghostWindow.style.left = newX + "px";
         ghostWindow.style.top = newY + "px";
     }
 });
 
 document.addEventListener("mouseup", () => {
-    if (isDragging && ghostWindow) {
-        // Move actual window to ghost's final position
-        popupWindow.style.left = ghostWindow.style.left;
-        popupWindow.style.top = ghostWindow.style.top;
-        
-        // Remove ghost
+    if (isDragging && ghostWindow && draggedPopup) {
+        draggedPopup.style.left = ghostWindow.style.left;
+        draggedPopup.style.top = ghostWindow.style.top;
+
         document.body.removeChild(ghostWindow);
         ghostWindow = null;
     }
     isDragging = false;
+    draggedPopup = null;
     document.body.style.userSelect = "";
 });
