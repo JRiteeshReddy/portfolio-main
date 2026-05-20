@@ -270,6 +270,12 @@ function appendContactForm(container) {
     ];
     let currentStep = 0;
     const data = { name: "", email: "", message: "" };
+    
+    // Track active transmission timeouts to allow cancellation/editing
+    let transmissionTimeouts = {
+        ids: [],
+        isAborted: false
+    };
 
     hiddenInput.addEventListener("input", () => {
         inputMirror.textContent = hiddenInput.value;
@@ -300,10 +306,49 @@ function appendContactForm(container) {
             const step = steps[currentStep];
             data[step.key] = value;
 
-            // Print step to static history
+            // Print step to static history with data-step-index attribute
             const historyLine = document.createElement("div");
-            historyLine.classList.add("terminal-history-line");
+            historyLine.classList.add("terminal-history-line", "interactive-history");
+            historyLine.setAttribute("data-step-index", currentStep);
             historyLine.innerHTML = `<span class="terminal-prompt-label">${step.key.toUpperCase()}:</span> ${value}`;
+            
+            // Allow clicking to edit/rewind to this step
+            const stepIndex = currentStep;
+            historyLine.addEventListener("click", () => {
+                // Abort any running transmission
+                transmissionTimeouts.isAborted = true;
+                transmissionTimeouts.ids.forEach(clearTimeout);
+                transmissionTimeouts.ids = [];
+
+                // Remove all lines from this step index onwards
+                const lines = historyContainer.querySelectorAll(".terminal-history-line");
+                lines.forEach(line => {
+                    const idxAttr = line.getAttribute("data-step-index");
+                    if (idxAttr === null) {
+                        // Status logs or validation warnings
+                        historyContainer.removeChild(line);
+                    } else {
+                        const idx = parseInt(idxAttr);
+                        if (idx >= stepIndex) {
+                            historyContainer.removeChild(line);
+                        }
+                    }
+                });
+
+                // Reset step & populate input
+                currentStep = stepIndex;
+                hiddenInput.value = data[steps[stepIndex].key];
+                inputMirror.textContent = hiddenInput.value;
+                promptLabel.innerHTML = steps[stepIndex].label;
+
+                // Re-enable form inputs
+                activeLine.style.display = "flex";
+                hiddenInput.disabled = false;
+                hiddenInput.focus();
+
+                container.scrollTop = container.scrollHeight;
+            });
+
             historyContainer.appendChild(historyLine);
 
             hiddenInput.value = "";
@@ -316,17 +361,18 @@ function appendContactForm(container) {
             } else {
                 activeLine.style.display = "none";
                 hiddenInput.disabled = true;
-                await submitTerminalForm(historyContainer, data, container);
+                transmissionTimeouts.isAborted = false;
+                await submitTerminalForm(historyContainer, data, container, transmissionTimeouts);
             }
             container.scrollTop = container.scrollHeight;
         }
     });
 }
 
-async function submitTerminalForm(historyContainer, data, container) {
+async function submitTerminalForm(historyContainer, data, container, transmissionTimeouts) {
     const printLine = (text, delay = 0, styleClass = "") => {
         return new Promise(resolve => {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 const line = document.createElement("div");
                 line.classList.add("terminal-history-line");
                 if (styleClass) line.classList.add(styleClass);
@@ -335,14 +381,21 @@ async function submitTerminalForm(historyContainer, data, container) {
                 container.scrollTop = container.scrollHeight;
                 resolve();
             }, delay);
+            transmissionTimeouts.push(timeoutId);
         });
     };
 
+    if (transmissionTimeouts.isAborted) return;
     await printLine("CONNECTING TO PORTFOLIO GUESTBOOK SECURE UPLINK...", 200);
+    if (transmissionTimeouts.isAborted) return;
     await printLine("UPLINK ESTABLISHED. HANDSHAKE PROTOCOL: SECURE.", 800);
+    if (transmissionTimeouts.isAborted) return;
     await printLine(`TRANSMITTING PAYLOAD FROM CLIENT: ${data.name.toUpperCase()}...`, 500);
+    if (transmissionTimeouts.isAborted) return;
     await printLine("UPLOADING PACKETS: [====================] 100%", 1000);
+    if (transmissionTimeouts.isAborted) return;
     await printLine(">>> SECURE TRANSACTION: GUESTBOOK WRITE SUCCESSFUL! <<<", 500, "terminal-success-box");
+    if (transmissionTimeouts.isAborted) return;
     await printLine("GUESTBOOK SESSION CLOSED. DISCONNECTING CLIENT...", 600);
 }
 

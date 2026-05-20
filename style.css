@@ -443,4 +443,15 @@ h1 {
     to { opacity: 0.4; }
 }
 
+.interactive-history {
+    cursor: pointer;
+    transition: text-shadow 0.1s ease;
+}
+
+.interactive-history:hover {
+    text-shadow: 0 0 8px var(--text-color);
+    text-decoration: underline;
+}
+
+
 
