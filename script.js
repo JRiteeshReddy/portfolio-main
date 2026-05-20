@@ -351,14 +351,15 @@ function appendContactForm(container) {
 
             historyContainer.appendChild(historyLine);
 
-            hiddenInput.value = "";
-            inputMirror.textContent = "";
-
             currentStep++;
 
             if (currentStep < steps.length) {
                 promptLabel.innerHTML = steps[currentStep].label;
+                hiddenInput.value = data[steps[currentStep].key] || "";
+                inputMirror.textContent = hiddenInput.value;
             } else {
+                hiddenInput.value = "";
+                inputMirror.textContent = "";
                 activeLine.style.display = "none";
                 hiddenInput.disabled = true;
                 transmissionTimeouts.isAborted = false;
