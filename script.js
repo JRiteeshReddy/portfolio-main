@@ -241,9 +241,11 @@ function appendContactForm(container) {
             <div class="terminal-history"></div>
             <div class="terminal-active-line">
                 <span class="terminal-prompt-label">NAME: &gt; </span>
-                <span class="terminal-input-mirror"></span>
-                <span class="blinking-cursor"></span>
-                <input type="text" class="terminal-hidden-input" autocomplete="off" spellcheck="false" />
+                <div class="terminal-input-wrapper">
+                    <span class="terminal-input-mirror"></span>
+                    <span class="blinking-cursor"></span>
+                    <input type="text" class="terminal-hidden-input" autocomplete="off" spellcheck="false" />
+                </div>
             </div>
         </div>
     `;
