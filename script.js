@@ -118,7 +118,7 @@ I'm an admin at BVA (Bangalore Vibecoders Association), a 300+ member community 
 
 I turn ideas into reality. Repeatedly.`;
 
-const workContent = `BEYOND THE SCREEN - EXTRA CURRICULAR ACTIVITIES:
+const extraCurricularContent = `BEYOND THE SCREEN - EXTRA CURRICULAR ACTIVITIES:
 
 1. EVENT VOLUNTEER
 Volunteered in multiple events including Codeavour 7.0, Comic Con (x2), and several university events — handling on-ground coordination and attendee experience.
@@ -134,6 +134,17 @@ Led marketing, event planning, and recruitment strategies. Organized Anime Day, 
 
 5. DESIGN LEAD — MULTIPLE CLUBS
 Led design and marketing efforts across clubs. Created posters, promotional materials, and social media content for various events and campaigns.`;
+
+const projectsContent = `PROJECTS REGISTRY:
+
+1. AI AGENT SHELL
+A customized terminal interface powered by LLMs for automated task execution and workspace management.
+
+2. BVA CLUB PLATFORM
+Portal developed for Bangalore Vibecoders Association enabling real-time member collaboration and showcase of club activities.
+
+3. MONOCHROME ENGINE
+A lightweight, pixel-perfect 2D rendering canvas engine with retro visual filters (CRT scanlines, chromatic aberration).`;
 
 const skillsContent = `SKILLS & TOOLS:
 
@@ -167,7 +178,7 @@ let dragOffsetX = 0;
 let dragOffsetY = 0;
 let ghostWindow = null;
 
-function openPopup(title, content) {
+function openPopup(title, content, width = "600px") {
     // If popup already exists, bring it to the front
     if (activePopups[title]) {
         const popup = activePopups[title];
@@ -179,6 +190,7 @@ function openPopup(title, content) {
     // Create a new popup window element
     const popup = document.createElement("div");
     popup.classList.add("popup-window");
+    popup.style.width = width;
     zIndexCounter++;
     popup.style.zIndex = zIndexCounter;
 
@@ -204,6 +216,15 @@ function openPopup(title, content) {
     const popupText = popup.querySelector(".popup-text");
     const closeBtn = popup.querySelector(".close-popup");
     const header = popup.querySelector(".popup-header");
+    const popupContentEl = popup.querySelector(".popup-content");
+
+    // Choppy, snapped, pixelated scrolling
+    popupContentEl.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const step = 32; // Snape scroll increment
+        const direction = e.deltaY > 0 ? 1 : -1;
+        popupContentEl.scrollTop = Math.round((popupContentEl.scrollTop + direction * step) / step) * step;
+    }, { passive: false });
 
     // Dynamic fast typing effect
     let charIndex = 0;
@@ -258,10 +279,11 @@ function openPopup(title, content) {
     });
 }
 
-document.getElementById("folder-about").addEventListener("click", () => openPopup("ABOUT.EXE", aboutContent));
-document.getElementById("folder-work").addEventListener("click", () => openPopup("WORK.EXE", workContent));
-document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent));
-document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent));
+document.getElementById("folder-about").addEventListener("click", () => openPopup("ABOUT.EXE", aboutContent, "560px"));
+document.getElementById("folder-projects").addEventListener("click", () => openPopup("PROJECTS.EXE", projectsContent, "640px"));
+document.getElementById("folder-extra").addEventListener("click", () => openPopup("EXTRA_CURRICULAR.EXE", extraCurricularContent, "750px"));
+document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent, "460px"));
+document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent, "500px"));
 
 // Global Document listeners for dragging ghost outline
 document.addEventListener("mousemove", (e) => {
