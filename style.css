@@ -469,27 +469,5 @@ h1 {
     text-decoration: underline;
 }
 
-.audio-control {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-family: var(--font-mono);
-    color: var(--text-color);
-    font-size: 0.9rem;
-    cursor: pointer;
-    z-index: 10000;
-    user-select: none;
-    border: 1px dashed transparent;
-    padding: 3px 8px;
-    transition: all 0.2s ease;
-    background: transparent;
-}
-
-.audio-control:hover {
-    border-color: var(--text-color);
-    text-shadow: 0 0 8px var(--text-color);
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
-}
-
 
 
