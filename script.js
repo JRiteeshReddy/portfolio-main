@@ -597,3 +597,166 @@ document.addEventListener("mouseup", () => {
     draggedPopup = null;
     document.body.style.userSelect = "";
 });
+
+// CRT Audio Synthesizer (Web Audio API)
+let audioCtx = null;
+let humOsc = null;
+let whineOsc = null;
+let masterGain = null;
+let soundEnabled = false;
+
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Master Gain for ambient hum
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.012, audioCtx.currentTime); // keep it extremely quiet
+    masterGain.connect(audioCtx.destination);
+    
+    // Low CRT Hum (60Hz sine)
+    humOsc = audioCtx.createOscillator();
+    humOsc.type = "sine";
+    humOsc.frequency.setValueAtTime(60, audioCtx.currentTime);
+    const humGain = audioCtx.createGain();
+    humGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    humOsc.connect(humGain);
+    humGain.connect(masterGain);
+    humOsc.start();
+    
+    // Flyback transformer whine (11500Hz sine, barely audible)
+    whineOsc = audioCtx.createOscillator();
+    whineOsc.type = "sine";
+    whineOsc.frequency.setValueAtTime(11500, audioCtx.currentTime);
+    const whineGain = audioCtx.createGain();
+    whineGain.gain.setValueAtTime(0.012, audioCtx.currentTime);
+    whineOsc.connect(whineGain);
+    whineGain.connect(masterGain);
+    whineOsc.start();
+}
+
+function stopAudio() {
+    if (humOsc) {
+        try { humOsc.stop(); } catch(e){}
+        humOsc = null;
+    }
+    if (whineOsc) {
+        try { whineOsc.stop(); } catch(e){}
+        whineOsc = null;
+    }
+    audioCtx = null;
+}
+
+function playKeyClick(keyType = "default") {
+    if (!audioCtx || !soundEnabled) return;
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    const now = audioCtx.currentTime;
+    
+    if (keyType === "space" || keyType === "enter") {
+        // Space/Enter: Deeper, chunkier mechanical click
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(500, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now + 0.07);
+        
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.start(now);
+        osc.stop(now + 0.08);
+    } else if (keyType === "backspace") {
+        // Backspace: Slightly higher pitch/metallic click
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+        
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.05);
+    } else {
+        // Default standard mechanical keyboard key click
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(1000, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.035);
+        
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+        osc.start(now);
+        osc.stop(now + 0.04);
+    }
+}
+
+function playStartupSound() {
+    if (!audioCtx || !soundEnabled) return;
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+    
+    const now = audioCtx.currentTime;
+    
+    // CRT Pop: low bass thud
+    const popOsc = audioCtx.createOscillator();
+    const popGain = audioCtx.createGain();
+    popOsc.type = "sine";
+    popOsc.frequency.setValueAtTime(90, now);
+    popOsc.frequency.exponentialRampToValueAtTime(10, now + 0.35);
+    popGain.gain.setValueAtTime(0.4, now);
+    popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    popOsc.connect(popGain);
+    popGain.connect(audioCtx.destination);
+    popOsc.start(now);
+    popOsc.stop(now + 0.4);
+    
+    // CRT Whine rising (static discharge)
+    const statOsc = audioCtx.createOscillator();
+    const statGain = audioCtx.createGain();
+    statOsc.type = "triangle";
+    statOsc.frequency.setValueAtTime(600, now);
+    statOsc.frequency.exponentialRampToValueAtTime(11500, now + 0.7);
+    statGain.gain.setValueAtTime(0.015, now);
+    statGain.gain.exponentialRampToValueAtTime(0.002, now + 0.7);
+    statOsc.connect(statGain);
+    statGain.connect(audioCtx.destination);
+    statOsc.start(now);
+    statOsc.stop(now + 0.75);
+}
+
+// Audio toggle button handler
+const audioToggle = document.getElementById("audio-toggle");
+if (audioToggle) {
+    audioToggle.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+            audioToggle.textContent = "[AUDIO: ON]";
+            initAudio();
+            playStartupSound();
+        } else {
+            audioToggle.textContent = "[AUDIO: OFF]";
+            stopAudio();
+        }
+    });
+}
+
+// Global typing click sound
+document.addEventListener("keydown", (e) => {
+    let keyType = "default";
+    if (e.key === " ") keyType = "space";
+    else if (e.key === "Enter") keyType = "enter";
+    else if (e.key === "Backspace") keyType = "backspace";
+    
+    playKeyClick(keyType);
+});
+
+// Folders, buttons, and popup link clicks
+document.addEventListener("click", (e) => {
+    if (e.target.closest(".folder") || e.target.closest("button") || e.target.closest(".interactive-history") || e.target.closest("a")) {
+        playKeyClick("enter");
+    }
+});
