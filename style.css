@@ -372,9 +372,8 @@ h1 {
 
 /* Terminal Style Input Form */
 .terminal-form-container {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 2px dashed var(--text-color);
+    margin-top: 10px;
+    padding-top: 0;
     width: 100%;
 }
 
