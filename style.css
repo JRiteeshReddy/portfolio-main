@@ -355,3 +355,17 @@ h1 {
 .popup-content::-webkit-scrollbar-thumb:active {
     box-shadow: inset 1.5px 1.5px 0px #000000, inset -1.5px -1.5px 0px var(--text-color); /* Pressed 3D effect */
 }
+
+/* Clickable terminal links */
+.terminal-link {
+    color: var(--text-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.terminal-link:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 5px var(--text-color);
+}

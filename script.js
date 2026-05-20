@@ -135,7 +135,7 @@ Led marketing, event planning, and recruitment strategies. Organized Anime Day, 
 5. DESIGN LEAD — MULTIPLE CLUBS
 Led design and marketing efforts across clubs. Created posters, promotional materials, and social media content for various events and campaigns.`;
 
-const projectsContent = `PROJECTS REGISTRY:
+let projectsContent = `PROJECTS REGISTRY:
 
 1. AI AGENT SHELL
 A customized terminal interface powered by LLMs for automated task execution and workspace management.
@@ -145,6 +145,51 @@ Portal developed for Bangalore Vibecoders Association enabling real-time member 
 
 3. MONOCHROME ENGINE
 A lightweight, pixel-perfect 2D rendering canvas engine with retro visual filters (CRT scanlines, chromatic aberration).`;
+
+async function loadContentfulProjects() {
+    try {
+        const spaceId = "ajk4pzy1lq44";
+        const accessToken = "zgIVfVbr1RQcO5e1EY-M1P5R7hS1PedKMnoa7xAdUhs";
+        const res = await fetch(`https://cdn.contentful.com/spaces/${spaceId}/environments/master/entries?access_token=${accessToken}&content_type=portfolio`);
+        if (!res.ok) throw new Error("Database fetch failed");
+        const data = await res.json();
+        
+        let formatted = "PROJECTS REGISTRY:\n\n";
+        let index = 1;
+        
+        // Sort items or use the order returned
+        const entries = data.items.filter(item => item.sys.type === 'Entry');
+        
+        entries.forEach(entry => {
+            if (entry.fields && entry.fields.title) {
+                const title = entry.fields.title;
+                const desc = entry.fields.description || "No description available.";
+                let projectUrl = entry.fields.projectUrl;
+                
+                // Drawing Offline (Magic Trick), and RNG Offline (Magic Trick) do not have any project url
+                if (title.includes("Drawing Offline") || title.includes("RNG Offline")) {
+                    projectUrl = "Magicians Exclusive Utility";
+                }
+                
+                formatted += `${index}. ${title.toUpperCase()}\n`;
+                formatted += `${desc}\n`;
+                if (projectUrl) {
+                    formatted += `URL: ${projectUrl}\n\n`;
+                } else {
+                    formatted += `URL: N/A\n\n`;
+                }
+                index++;
+            }
+        });
+        
+        projectsContent = formatted.trim();
+    } catch (err) {
+        console.error("Contentful load error:", err);
+    }
+}
+
+// Call on startup
+loadContentfulProjects();
 
 const skillsContent = `SKILLS & TOOLS:
 
@@ -177,6 +222,15 @@ let isDragging = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 let ghostWindow = null;
+
+function linkifyPopup(element) {
+    const text = element.textContent;
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    element.innerHTML = text.replace(urlRegex, (url) => {
+        let cleanUrl = url.replace(/[.,;)]$/, '');
+        return `<a href="${cleanUrl}" target="_blank" class="terminal-link">${cleanUrl}</a>`;
+    });
+}
 
 function openPopup(title, content, width = "600px") {
     // If popup already exists, bring it to the front
@@ -233,6 +287,7 @@ function openPopup(title, content, width = "600px") {
         charIndex++;
         if (charIndex >= content.length) {
             clearInterval(typeInterval);
+            linkifyPopup(popupText);
         }
     }, 10);
 
