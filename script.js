@@ -118,27 +118,72 @@ I'm an admin at BVA (Bangalore Vibecoders Association), a 300+ member community 
 
 I turn ideas into reality. Repeatedly.`;
 
-const folderAbout = document.getElementById("folder-about");
+const workContent = `BEYOND THE SCREEN - EXTRA CURRICULAR ACTIVITIES:
+
+1. EVENT VOLUNTEER
+Volunteered in multiple events including Codeavour 7.0, Comic Con (x2), and several university events — handling on-ground coordination and attendee experience.
+
+2. STUDENT LIFE ASSOCIATE
+Organized university-level events on multiple occasions and mentored multiple clubs assigned to me, bridging student leadership and institutional goals.
+
+3. FORMER HOD — GAMING AFFINITY
+Served as Head of Department for the Gaming Affinity vertical at Viral Fission (Virtual), leading the gaming community and content direction.
+
+4. VICE PRESIDENT — ANIME & MANGA CLUB
+Led marketing, event planning, and recruitment strategies. Organized Anime Day, Student Induction Program (SIP), and stall events — gaining 100+ followers and 30+ recruitments.
+
+5. DESIGN LEAD — MULTIPLE CLUBS
+Led design and marketing efforts across clubs. Created posters, promotional materials, and social media content for various events and campaigns.`;
+
+const skillsContent = `SKILLS & TOOLS:
+
+* English Proficiency (Written)
+* Event Management
+* Digital Marketing
+* Graphic Designing
+* Vibe Coding
+* Web Development (HTML, CSS, JS, React)
+* Android App Development
+* UI & UX Design`;
+
+const contactContent = `CONTACT DETAILS:
+
+Name: J Riteesh Reddy
+Title: Student Developer
+GitHub: https://github.com/JRiteeshReddy
+Email: contact@jriteeshreddy.dev
+Status: Open for opportunities & collaborations.
+
+---
+Please feel free to reach out via GitHub or email!`;
+
 const popupContainer = document.getElementById("popup-container");
 const closePopup = document.getElementById("close-popup");
 const popupText = document.getElementById("popup-text");
+const popupTitle = document.getElementById("popup-title");
 
 let typePopupInterval;
 
-folderAbout.addEventListener("click", () => {
+function openPopup(title, content) {
+    popupTitle.textContent = title;
     popupContainer.classList.remove("hidden");
     popupText.textContent = "";
     clearInterval(typePopupInterval);
     
     let charIndex = 0;
     typePopupInterval = setInterval(() => {
-        popupText.textContent += aboutContent.charAt(charIndex);
+        popupText.textContent += content.charAt(charIndex);
         charIndex++;
-        if (charIndex >= aboutContent.length) {
+        if (charIndex >= content.length) {
             clearInterval(typePopupInterval);
         }
     }, 10); // Type very quickly
-});
+}
+
+document.getElementById("folder-about").addEventListener("click", () => openPopup("ABOUT.EXE", aboutContent));
+document.getElementById("folder-work").addEventListener("click", () => openPopup("WORK.EXE", workContent));
+document.getElementById("folder-skills").addEventListener("click", () => openPopup("SKILLS.EXE", skillsContent));
+document.getElementById("folder-contact").addEventListener("click", () => openPopup("CONTACT.EXE", contactContent));
 
 closePopup.addEventListener("click", () => {
     popupContainer.classList.add("hidden");
