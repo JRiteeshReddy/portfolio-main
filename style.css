@@ -131,11 +131,11 @@ body {
 }
 
 .portfolio-label {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
     text-transform: uppercase;
     opacity: 0.6;
-    letter-spacing: 2px;
-    margin-bottom: -5px;
+    letter-spacing: 4px;
+    margin-bottom: 0px;
 }
 
 h1 {
