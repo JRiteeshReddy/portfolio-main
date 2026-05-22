@@ -156,11 +156,24 @@ h1 {
     font-size: 1.5rem;
 }
 
+.terminal-logo {
+    font-family: var(--font-mono);
+    font-size: clamp(5px, 1.3vw, 10px);
+    line-height: 1.1;
+    color: var(--text-color);
+    text-shadow: 0 0 5px var(--text-color);
+    margin-bottom: 25px;
+    white-space: pre;
+    opacity: 0.85;
+    user-select: none;
+}
+
 /* Random Screen Glitch Effect */
 .glitching {
     animation: randomGlitch 0.2s infinite, fontGlitch 0.15s infinite steps(1);
 }
 
+.glitching .terminal-logo,
 .glitching .folder pre,
 .glitching .close-popup,
 .glitching .terminal-form,
@@ -526,6 +539,11 @@ h1 {
         align-items: center;
         text-align: center;
         padding-right: 0;
+    }
+    
+    .terminal-logo {
+        font-size: clamp(3.5px, 1.8vw, 6px);
+        margin-bottom: 15px;
     }
     
     .folder pre {
