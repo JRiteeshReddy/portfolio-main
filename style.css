@@ -158,13 +158,13 @@ h1 {
 
 .terminal-logo {
     font-family: var(--font-mono);
-    font-size: clamp(3px, 0.7vw, 6px);
-    line-height: 1.1;
+    font-size: clamp(2px, 0.45vw, 4px);
+    line-height: 1.05;
     color: var(--text-color);
-    text-shadow: 0 0 4px var(--text-color);
-    margin-bottom: 4px;
+    text-shadow: 0 0 3px var(--text-color);
+    margin-bottom: 6px;
     white-space: pre;
-    opacity: 0.85;
+    opacity: 0.9;
     user-select: none;
 }
 
