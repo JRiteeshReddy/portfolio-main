@@ -456,6 +456,38 @@ async function submitTerminalForm(historyContainer, data, container, transmissio
     }
 }
 
+let typingCount = 0;
+let spinnerInterval = null;
+
+function startTypingLoader() {
+    typingCount++;
+    if (typingCount === 1) {
+        const loader = document.getElementById("typing-loader");
+        const spinner = loader.querySelector(".loader-spinner");
+        loader.classList.remove("hidden");
+        
+        const frames = ["[ | ]", "[ / ]", "[ - ]", "[ \\ ]"];
+        let frameIdx = 0;
+        
+        clearInterval(spinnerInterval);
+        spinnerInterval = setInterval(() => {
+            spinner.textContent = frames[frameIdx];
+            frameIdx = (frameIdx + 1) % frames.length;
+        }, 100);
+    }
+}
+
+function stopTypingLoader() {
+    typingCount--;
+    if (typingCount <= 0) {
+        typingCount = 0;
+        const loader = document.getElementById("typing-loader");
+        loader.classList.add("hidden");
+        clearInterval(spinnerInterval);
+        spinnerInterval = null;
+    }
+}
+
 function openPopup(title, content, width = "600px") {
     // If popup already exists, bring it to the front
     if (activePopups[title]) {
@@ -506,11 +538,18 @@ function openPopup(title, content, width = "600px") {
 
     // Dynamic fast typing effect
     let charIndex = 0;
+    let isTypingActive = true;
+    startTypingLoader();
+
     let typeInterval = setInterval(() => {
         popupText.textContent += content.charAt(charIndex);
         charIndex++;
         if (charIndex >= content.length) {
             clearInterval(typeInterval);
+            if (isTypingActive) {
+                isTypingActive = false;
+                stopTypingLoader();
+            }
             linkifyPopup(popupText);
             const mainCursor = popup.querySelector(".popup-content > .blinking-cursor");
             if (mainCursor) mainCursor.style.display = "none";
@@ -530,6 +569,10 @@ function openPopup(title, content, width = "600px") {
     closeBtn.addEventListener("click", (e) => {
         e.stopPropagation(); // Prevent triggering window selection/mousedown
         clearInterval(typeInterval);
+        if (isTypingActive) {
+            isTypingActive = false;
+            stopTypingLoader();
+        }
         popupContainer.removeChild(popup);
         delete activePopups[title];
     });

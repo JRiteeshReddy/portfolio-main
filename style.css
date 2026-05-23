@@ -685,5 +685,57 @@ h1 {
     }
 }
 
+/* Global Typing Loader */
+#typing-loader {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none; /* Let clicks pass through */
+    animation: loader-glow 1.5s infinite alternate;
+}
+
+.loader-box {
+    background-color: rgba(12, 12, 12, 0.95);
+    border: 3px double var(--text-color);
+    padding: 8px 20px;
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2), inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+.loader-text {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.loader-spinner {
+    font-weight: bold;
+    min-width: 45px;
+    text-align: center;
+}
+
+@keyframes loader-glow {
+    from {
+        box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+        border-color: rgba(0, 255, 65, 0.7);
+    }
+    to {
+        box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
+        border-color: rgba(0, 255, 65, 1);
+    }
+}
+
+@media (max-width: 768px) {
+    #typing-loader {
+        top: 10px;
+    }
+}
+
 
 
